@@ -56,3 +56,7 @@ Thumbs.db
 
 # Local development
 *.local
+
+# wikipdf output
+output/
+*.pdf

@@ -1,25 +1,16 @@
-# Core scientific computing
-numpy
-pandas
-scipy
-matplotlib
-openpyxl
+# Core PDF generation
+fpdf2
+wikipedia-api
+
+# CLI & caching
+click
+requests-cache
 
 # Testing
 pytest
 pytest-cov
+pytest-mock
 
 # Code quality
 ruff
-black
-
-# Utilities
-requests
-python-dotenv
-
-# Jupyter support
-ipykernel
-notebook
-
-# Type checking
 mypy

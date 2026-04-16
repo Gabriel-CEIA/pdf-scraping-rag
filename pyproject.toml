@@ -1,0 +1,27 @@
+[project]
+name = "wikipdf"
+version = "0.1.0"
+description = "Wikipedia PDF Generator - Fetch Wikipedia articles and convert to PDF"
+requires-python = ">=3.12"
+dependencies = [
+    "fpdf2",
+    "wikipedia-api",
+    "click",
+    "requests-cache",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "ruff",
+    "mypy",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,25 +1,31 @@
 # wikipdf
 
-A CLI tool that fetches Wikipedia articles and generates PDFs for offline reading.
+A CLI tool that fetches Wikipedia articles and converts them to PDF files for offline reading. Ideal for students, researchers, and anyone who needs portable access to Wikipedia content without internet.
+
+[![Python](https://img.shields.io/badge/Python-3.12-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MPL%202.0-yellow)](https://opensource.org/licenses/MPL-2.0)
 
 ---
 
 ## Why
 
-Wikipedia is a valuable knowledge resource, but internet access isn't always available. This tool converts Wikipedia articles to PDF files that can be read offline on any device.
+Wikipedia contains vast knowledge, but internet access isn't always available. This tool solves two problems:
 
-### Problem
+1. **Offline access** — Convert articles to PDF for reading without internet.
+2. **Portable format** — PDF works on any device, unlike web browsers.
 
-- No offline access to Wikipedia articles
-- Browser-based reading isn't ideal for long-form content
-
-### Solution
-
-Fetch article content via Wikipedia API and generate standalone PDF files.
+The goal is simple: fetch any Wikipedia article and get a standalone PDF file.
 
 ---
 
 ## How
+
+### Architecture
+
+- **Fetcher** — Uses `wikipedia-api` to fetch article content via Wikipedia API.
+- **PDF Generator** — Uses `fpdf2` to create PDF documents.
+- **CLI** — Built with `click` for command-line interface.
+- **Cache** — Uses `requests-cache` to cache API responses.
 
 ### Installation
 
@@ -42,7 +48,7 @@ python -m wikipdf fetch "Machine learning" -o ./output/
 
 ### Topics File Format
 
-One topic per line. Blank lines and `#` comments are ignored:
+One topic per line. Blank lines and lines starting with `#` are ignored:
 
 ```
 # My reading list
@@ -78,6 +84,19 @@ Deep_learning
 
 ---
 
+## Configuration
+
+No configuration required. Default settings in `src/wikipdf/config.py`:
+
+- Output directory: `output/`
+- PDF page size: A4
+- Font sizes: 18pt (title), 14pt (section), 11pt (body)
+
+---
+
 ## License
 
-MPL 2.0 — See [LICENSE](LICENSE)
+This project is licensed under the Mozilla Public License 2.0.  
+SPDX-License-Identifier: MPL-2.0
+
+See the LICENSE file for full details.

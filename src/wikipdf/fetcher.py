@@ -32,8 +32,8 @@ class WikipediaFetcher:
     def __init__(self, language: str = config.DEFAULT_WIKIPEDIA_LANGUAGE):
         self.language = language
         self._wiki = wikipediaapi.Wikipedia(
-            language,
-            headers={"User-Agent": "wikipdf/0.1.0 (https://github.com/wikipdf)"},
+            language=language,
+            user_agent="wikipdf/0.1.0 (https://github.com/wikipdf)",
         )
         if config.CACHE_ENABLED:
             session = CachedSession(

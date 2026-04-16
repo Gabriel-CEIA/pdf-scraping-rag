@@ -54,16 +54,24 @@ class ErrorTracker:
 
 @click.group()
 @click.option(
+    "-o",
     "--output-dir",
     type=click.Path(path_type=Path),
     default=config.OUTPUT_DIR,
     help="Output directory for PDFs",
 )
+@click.option(
+    "-l",
+    "--language",
+    default=config.DEFAULT_WIKIPEDIA_LANGUAGE,
+    help="Wikipedia language (en, es, fr, etc.)",
+)
 @click.pass_context
-def cli(ctx: click.Context, output_dir: Path) -> None:
+def cli(ctx: click.Context, output_dir: Path, language: str) -> None:
     """Wikipedia PDF Generator - Fetch Wikipedia articles and convert to PDF."""
     ctx.ensure_object(dict)
     ctx.obj["output_dir"] = output_dir
+    ctx.obj["language"] = language
     output_dir.mkdir(parents=True, exist_ok=True)
 
 
@@ -75,14 +83,22 @@ def cli(ctx: click.Context, output_dir: Path) -> None:
     type=click.Path(path_type=Path),
     help="Output directory (overrides global)",
 )
+@click.option(
+    "-l",
+    "--language",
+    help="Wikipedia language (overrides global)",
+)
 @click.pass_context
-def fetch(ctx: click.Context, topic: str, output_dir: Optional[Path]) -> None:
+def fetch(
+    ctx: click.Context, topic: str, output_dir: Optional[Path], language: Optional[str]
+) -> None:
     """Fetch a single Wikipedia article and generate PDF."""
     output_dir = output_dir or ctx.obj["output_dir"]
+    lang = language or ctx.obj["language"]
     tracker = ErrorTracker(output_dir)
 
     try:
-        article = fetch_article(topic)
+        article = fetch_article(topic, lang)
         if article is None:
             tracker.add_error(topic, "Article not found on Wikipedia")
             tracker.write_logs()
@@ -108,14 +124,25 @@ def fetch(ctx: click.Context, topic: str, output_dir: Optional[Path]) -> None:
     type=click.Path(path_type=Path),
     help="Output directory (overrides global)",
 )
+@click.option(
+    "-l",
+    "--language",
+    help="Wikipedia language (overrides global)",
+)
 @click.pass_context
-def bulk(ctx: click.Context, input_file: Path, output_dir: Optional[Path]) -> None:
+def bulk(
+    ctx: click.Context,
+    input_file: Path,
+    output_dir: Optional[Path],
+    language: Optional[str],
+) -> None:
     """Fetch multiple Wikipedia articles from a file.
 
     INPUT_FILE should contain one topic per line.
     Blank lines and lines starting with # are ignored.
     """
     output_dir = output_dir or ctx.obj["output_dir"]
+    lang = language or ctx.obj["language"]
     tracker = ErrorTracker(output_dir)
 
     with open(input_file) as f:
@@ -127,7 +154,7 @@ def bulk(ctx: click.Context, input_file: Path, output_dir: Optional[Path]) -> No
 
     for topic in topics:
         try:
-            article = fetch_article(topic)
+            article = fetch_article(topic, lang)
             if article is None:
                 tracker.add_error(topic, "Article not found")
                 continue
